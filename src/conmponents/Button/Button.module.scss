@@ -1,0 +1,25 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+
+.Button {
+  @include btn-reset;
+  @include h16;
+  display: inline-block;
+  width: 100%;
+  padding: 16px;
+  color: #fff;
+  text-align: center;
+  background-color: $primary;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
+    cursor: pointer;
+    background-color: $add;
+  }
+
+  &:disabled {
+    background-color: $grey300;
+  }
+}

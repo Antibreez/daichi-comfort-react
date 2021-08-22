@@ -1,0 +1,28 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+
+.FormBlock {
+  width: 410px;
+  width: 100%;
+  padding: 48px;
+  text-align: center;
+  background-color: #fff;
+}
+
+.FormBlock__icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 0 48px;
+}
+
+.FormBlock__title {
+  @include h18;
+  color: $text-main;
+  margin: 0 0 15px;
+}
+
+.FormBlock__desc {
+  @include b12;
+  color: $grey400;
+  margin: 0 0 36px;
+}

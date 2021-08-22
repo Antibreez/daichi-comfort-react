@@ -1,0 +1,102 @@
+@import '../node_modules/normalize.css/normalize.css';
+@import './styles/variables';
+@import './styles/mixins';
+@import './styles/fonts';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  // display: flex;
+}
+
+html {
+  min-width: 800px;
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  min-width: 800px;
+  min-height: 100vh;
+
+  font-family: $font;
+}
+
+main {
+  flex-grow: 1;
+}
+
+input:not([type=checkbox]):not([type=radio]),
+textarea,
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+input:-moz-focusring {
+  outline: none;
+  border-color: #00adef;
+  box-shadow: none;
+}
+
+input:invalid {
+  outline: none;
+  box-shadow: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  margin: -1px;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.wrapper {
+  max-width: $width-desktop;
+  margin: 0 auto;
+  padding-left: $desktop-gap;
+  padding-right: $desktop-gap;
+}
+
+input:not([type=checkbox]):not([type=radio]),
+textarea,
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+button {
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

@@ -1,0 +1,57 @@
+@import '../../styles/mixins';
+
+.Auth {
+  height: 100vh;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%),
+              url('../../assets/images/bedroom.jpg') center / cover no-repeat;
+
+  h1 {
+    color: red;
+  }
+}
+
+.Auth__header {
+  padding: 24px 0;
+}
+
+.Auth__wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.Auth__main {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Auth__footer {
+  @include b12;
+  display: flex;
+  padding: 24px 0;
+  justify-content: space-between;
+  color: #fff;
+}
+
+.Auth__footerRoolsLink {
+  color: inherit;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: #fff;
+  }
+}
+
+.Auth__formBlockOuter {
+  width: 410px;
+}
+
+.Auth__formBlockInner {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+}

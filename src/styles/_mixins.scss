@@ -1,0 +1,162 @@
+//РАЗРЕШЕНИЯ
+
+// Меньше 1200
+@mixin tablet {
+  @media (max-width: $width-desktop - 1px) {
+    @content;
+  }
+}
+
+// Меньше 960
+@mixin mobile {
+  @media (max-width: $width-tablet - 1px) {
+    @content;
+  }
+}
+
+// Меньше 640
+@mixin mobile-small {
+  @media (max-width: $width-tablet-small - 1px) {
+    @content;
+  }
+}
+
+// СБРОС СТИЛЕЙ
+
+@mixin list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin link-reset {
+  text-decoration: none;
+  color: inherit;
+}
+
+@mixin btn-reset {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  border: none;
+  background-color: transparent;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+// ШРИФТЫ
+@mixin font-face($name, $filename, $weight) {
+  @font-face {
+    font-family: $name;
+    font-weight: $weight;
+    font-style: normal;
+    font-display: swap;
+    src: url('../assets/fonts/'+$filename+'.eot'); /* IE9 Compat Modes */
+    src: local(''),
+      url('../assets/fonts/'+$filename+'.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+      url('../assets/fonts/'+$filename+'.woff') format('woff'), /* Modern Browsers */
+      url('../assets/fonts/'+$filename+'.ttf') format('truetype'), /* Safari, Android, iOS */
+      url('../assets/fonts/'+$filename+'.svg#PlayfairDisplay') format('svg'); /* Legacy iOS */
+  }
+}
+
+// РЕТИНА
+@mixin retina {
+  @media (min-resolution: $retina-dpi), (min-resolution: $retina-dppx) {
+    @content;
+  }
+}
+
+//ПЛАНВНЫЙ ХОВЕР
+@mixin transition($duration: 0.2s) {
+  transition: all $duration ease;
+}
+
+// ШРИФТЫ
+@mixin font($size, $height, $weight: 400) {
+  font-size: $size;
+  line-height: $height;
+  font-weight: $weight;
+}
+
+@mixin h64 {
+  @include font(64px, 77px, 500);
+}
+
+@mixin h40 {
+  @include font(40px, 48px, 500);
+}
+
+@mixin h30 {
+  @include font(30px, 38px, 500);
+}
+
+@mixin h24 {
+  @include font(24px, 29px, 500);
+}
+
+@mixin h18 {
+  @include font(18px, 22px, 500);
+}
+
+@mixin h16 {
+  @include font(16px, 19px, 500);
+}
+
+@mixin h12 {
+  @include font(12px, 14px, 500);
+}
+
+@mixin b16 {
+  @include font(16px, 24px);
+}
+
+@mixin b12 {
+  @include font(12px, 18px);
+}
+
+@mixin b10 {
+  @include font(10px, 15px);
+}
+
+//ГРАДИЕНТЫ
+@mixin gradient1($direction: 180deg) {
+  background: linear-gradient($direction, #5EA9FF 0%, #D5D3FF 100%);
+}
+
+@mixin gradient2($direction: 180deg) {
+  background: linear-gradient($direction, #FFA3B9 0%, #FFE4AA 100%);
+}
+
+//============================
+
+@mixin overflow-3lines {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  //display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  box-orient: vertical;
+}
+
+
+@mixin overflow-10lines {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  //display: -webkit-box;
+  -webkit-line-clamp: 10;
+  -webkit-box-orient: vertical;
+  line-clamp: 10;
+  box-orient: vertical;
+}
+
+
