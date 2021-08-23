@@ -6,13 +6,10 @@ import logo from '../../assets/images/logo-white.svg';
 import EntranceControl from '../../conmponents/controls/EntranceControl';
 import FormBlock from '../../conmponents/FormBlock/FormBlock';
 import { showEmailSingIn, showEntrance } from '../../redux/actions/auth';
+import EmailSinginControl from '../../conmponents/controls/EmailSinginControl';
 
 
 function Auth(props) {
-  function entranceHandler(e) {
-    e.preventDefault();
-     props.showEmailSingIn();
-  }
 
   return (
     <div className={s.Auth}>
@@ -33,7 +30,7 @@ function Auth(props) {
                       desc='Укажите E-mail или номер телефона для входа в аккаунт или регистрации в приложении'
                       hasLogo={true}
                     >
-                      <EntranceControl onClick={entranceHandler}/>
+                      <EntranceControl />
                     </FormBlock>
                   : null
               }
@@ -42,10 +39,10 @@ function Auth(props) {
                 props.isEmailSign
                   ? <FormBlock
                       title='Введите email'
-                      desc='Укажите E-mail или номер телефона для входа в аккаунт или регистрации в приложении'
-                      hasLogo={true}
+                      desc='Введите пароль вашей учётной записи'
+                      hasLogo={false}
                     >
-                      <EntranceControl />
+                      <EmailSinginControl />
                     </FormBlock>
                   : null
               }

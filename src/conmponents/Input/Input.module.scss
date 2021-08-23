@@ -47,3 +47,16 @@
     }
   }
 }
+
+.Input.invalid {
+  label {
+    color: $fail;
+  }
+}
+
+.Input__message {
+  @include b12;
+  color: $fail;
+  margin: 8px 0 0;
+  padding: 0 16px;
+}

@@ -8,9 +8,10 @@ function Input(props) {
 
   const inputType = props.type || 'text';
   const htmlFor = `${inputType}-${Math.random()}`;
+  const errorMessage = props.message || 'Введите верное значение'
 
   return (
-    <div className={ cl(s.Input, {[s.inValid] : props.isValid})}>
+    <div className={ cl(s.Input, {[s.invalid] : !props.isValid})}>
       <label className={ cl({[s.isEmpty] : !isFocused}) } htmlFor={htmlFor}>{ props.label }</label>
       <input 
         type={inputType}
@@ -20,6 +21,8 @@ function Input(props) {
         onBlur={() => props.value.trim() === '' && setFocuse(false)}
         value={props.value}
       />
+
+      { !props.isValid ? <p className={s.Input__message}>{ errorMessage }</p> : null }
     </div>
   )
 }
