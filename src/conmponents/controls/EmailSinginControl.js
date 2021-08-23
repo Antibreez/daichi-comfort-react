@@ -4,7 +4,7 @@ import s from './Controls.module.scss'
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { connect } from 'react-redux';
-import { signIn, setSigninFailMessage } from '../../redux/actions/auth';
+import { signIn, setFailMessage } from '../../redux/actions/auth';
 
 function EmailSigninControl(props) {
   const [value, setValue] = useState('')
@@ -20,20 +20,21 @@ function EmailSigninControl(props) {
     setValue(e.target.value);
     isFormDisabled && setFormDisable(false);
     // !isInputValid && setInputValidity(true)
-    props.signinFailMessage.length > 0 && props.setSigninFailMessage('')
   }
+
+  props.errorMessage.legth > 0 ? console.log('wrong') : console.log('true');;
 
   return (
     <div>
       <div className={s.Controls}>
-        { props.signinFailMessage.length > 0 
+        { props.errorMessage.length > 0 
             ? <Input
                 type='password'
-                label='Email'
+                label='Пароль'
                 isValid={false}
                 value={value}
                 onChange={changeHandle}
-                message={props.signinFailMessage}
+                message={props.errorMessage}
               />
             : <Input
                 type='password'
@@ -41,7 +42,7 @@ function EmailSigninControl(props) {
                 isValid={true}
                 value={value}
                 onChange={changeHandle}
-                message={props.signinFailMessage}
+                message={props.errorMessage}
               />
         }
 
@@ -60,14 +61,14 @@ function EmailSigninControl(props) {
 
 function mapStateToProps(state) {
   return {
-    signinFailMessage: state.auth.signinFailMessage,
+    errorMessage: state.auth.errorMessage,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     signIn: (password) => dispatch(signIn(password)),
-    setSigninFailMessage: (message) => dispatch(setSigninFailMessage(message))
+    setFailMessage: (message) => dispatch(setFailMessage(message))
   }
 }
 

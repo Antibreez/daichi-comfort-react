@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import s from './Controls.module.scss'
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { connect } from 'react-redux';
-import { showEntrance, showEmailSingIn, entranceCheck, setEmail } from '../../redux/actions/auth';
+import { entranceCheck, setEmail, setFailMessage } from '../../redux/actions/auth';
 
 function EntranceControl(props) {
   const [value, setValue] = useState('')
@@ -16,17 +16,29 @@ function EntranceControl(props) {
     if (value.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/) === null) {
       setInputValidity(false)
     } else {
-      props.showEmailSingIn();
-      props.entranceCheck(value, '12345')
-      props.setEmail(value)
+      //props.showEmailSingIn();
+      props.entranceCheck(value, '111')
+      //props.setEmail(value)
     }
   }
 
   function changeHandle(e) {
     setValue(e.target.value);
     isFormDisabled && setFormDisable(false);
-    !isInputValid && setInputValidity(true)
+    !isInputValid && setInputValidity(true);
+    setFailMessage('');
   }
+
+  useEffect(() => {
+    props.errorMessage.length > 0 ? setInputValidity(false) : setInputValidity(true)
+  }, [props.errorMessage])
+
+  useEffect(() => {
+    return () => {
+      console.log('componentWillUnmount')
+    }
+  }, [])
+
 
   return (
     <div>
@@ -37,7 +49,7 @@ function EntranceControl(props) {
           isValid={isInputValid}
           value={value}
           onChange={changeHandle}
-          message='Некорректный формат адреса Email или номера телефона'
+          message={props.errorMessage.length > 0 ? props.errorMessage : 'Некорректный формат адреса Email или номера телефона'}
         />
       </div>
       <div className={s.Controls__btn}>
@@ -53,18 +65,16 @@ function EntranceControl(props) {
 
 function mapStateToProps(state) {
   return {
-    isEntrance: state.auth.isEntrance,
-    isEmailSign: state.auth.isEmailSign,
-    email: state.auth.email
+    email: state.auth.email,
+    errorMessage: state.auth.errorMessage
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    showEntrance: () => dispatch(showEntrance()),
-    showEmailSingIn: () => dispatch(showEmailSingIn()),
     entranceCheck: (value, password) => dispatch(entranceCheck(value, password)),
     setEmail: (value) => dispatch(setEmail(value)),
+    setFailMessage: (message) => dispatch(setFailMessage(message))
   }
 }
 

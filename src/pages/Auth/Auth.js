@@ -7,6 +7,7 @@ import EntranceControl from '../../conmponents/controls/EntranceControl';
 import FormBlock from '../../conmponents/FormBlock/FormBlock';
 import { showEmailSingIn, showEntrance } from '../../redux/actions/auth';
 import EmailSinginControl from '../../conmponents/controls/EmailSinginControl';
+import Loader from '../../conmponents/Loader/Loader';
 
 
 function Auth(props) {
@@ -23,6 +24,8 @@ function Auth(props) {
             { false ? <button>go back</button> : null }
 
             <div className={s.Auth__formBlockInner}>
+              { props.isLoading ? <Loader/> : null }
+
               {
                 props.isEntrance
                   ? <FormBlock
@@ -38,7 +41,7 @@ function Auth(props) {
               {
                 props.isEmailSign
                   ? <FormBlock
-                      title='Введите email'
+                      title='Вход через Email'
                       desc='Введите пароль вашей учётной записи'
                       hasLogo={false}
                     >
@@ -62,7 +65,8 @@ function Auth(props) {
 function mapStateToProps(state) {
   return {
     isEntrance: state.auth.isEntrance,
-    isEmailSign: state.auth.isEmailSign
+    isEmailSign: state.auth.isEmailSign,
+    isLoading: state.auth.isLoading
   }
 }
 

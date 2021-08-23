@@ -1,9 +1,10 @@
-import { SET_EMAIL, SET_SIGNIN_FAIL_MESSAGE, SHOW_EMAIL_SING_IN, SHOW_ENTRANCE } from "../actions/actionTypes";
+import { HAS_LOADING, NO_LOADING, SET_EMAIL, SET_FAIL_MESSAGE, SHOW_EMAIL_SING_IN, SHOW_ENTRANCE } from "../actions/actionTypes";
 
 const initialSatate = {
   email: null,
   password: null,
-  signinFailMessage: '',
+  errorMessage: '',
+  isLoading: false,
   isEntrance: true,
   isEmailSign: false
 }
@@ -27,11 +28,21 @@ export default function auth(state = initialSatate, action) {
         ...state,
         email: action.payload
       }
-    case SET_SIGNIN_FAIL_MESSAGE:
+    case SET_FAIL_MESSAGE:
       return {
         ...state,
-        signinFailMessage: action.payload
+        errorMessage: action.payload
       }
+    case HAS_LOADING:
+      return {
+        ...state,
+        isLoading: true
+      }
+      case NO_LOADING:
+        return {
+          ...state,
+          isLoading: false
+        }
     default:
       return state
   }
