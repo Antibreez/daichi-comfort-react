@@ -5,6 +5,7 @@ import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { connect } from 'react-redux';
 import { signIn, setFailMessage } from '../../redux/actions/auth';
+import { useEffect } from 'react';
 
 function EmailSigninControl(props) {
   const [value, setValue] = useState('')
@@ -19,34 +20,25 @@ function EmailSigninControl(props) {
   function changeHandle(e) {
     setValue(e.target.value);
     isFormDisabled && setFormDisable(false);
-    // !isInputValid && setInputValidity(true)
+    !isInputValid && setInputValidity(true);
+    setFailMessage('');
   }
 
-  props.errorMessage.legth > 0 ? console.log('wrong') : console.log('true');;
+  useEffect(() => {
+    props.errorMessage.length > 0 ? setInputValidity(false) : setInputValidity(true)
+  }, [props.errorMessage])
 
   return (
     <div>
-      <div className={s.Controls}>
-        { props.errorMessage.length > 0 
-            ? <Input
-                type='password'
-                label='Пароль'
-                isValid={false}
-                value={value}
-                onChange={changeHandle}
-                message={props.errorMessage}
-              />
-            : <Input
-                type='password'
-                label='Email'
-                isValid={true}
-                value={value}
-                onChange={changeHandle}
-                message={props.errorMessage}
-              />
-        }
-
-        
+      <div className={s.Controls}> 
+        <Input
+          type='password'
+          label='Пароль'
+          isValid={isInputValid}
+          value={value}
+          onChange={changeHandle}
+          message={props.errorMessage}
+        />
       </div>
       <div className={s.Controls__btn}>
         <Button

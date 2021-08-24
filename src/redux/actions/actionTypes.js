@@ -1,4 +1,5 @@
 export const SHOW_EMAIL_SING_IN = 'SHOW_EMAIL_SING_IN';
+export const SHOW_EMAIL_SING_UP = 'SHOW_EMAIL_SING_UP';
 export const SHOW_ENTRANCE = 'SHOW_ENTRANCE';
 export const SET_EMAIL = 'SET_EMAIL';
 export const SET_PASSWORD = 'SET_PASSWORD';

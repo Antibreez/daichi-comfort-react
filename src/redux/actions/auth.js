@@ -1,4 +1,4 @@
-import { HAS_LOADING, NO_LOADING, SET_EMAIL, SET_FAIL_MESSAGE, SHOW_EMAIL_SING_IN, SHOW_ENTRANCE } from "./actionTypes";
+import { HAS_LOADING, NO_LOADING, SET_EMAIL, SET_FAIL_MESSAGE, SHOW_EMAIL_SING_IN, SHOW_EMAIL_SING_UP, SHOW_ENTRANCE } from "./actionTypes";
 import Firebase from "../../services/firebase";
 
 const firebase = new Firebase();
@@ -23,6 +23,9 @@ export function entranceCheck(email, password) {
         if (e.code === 'auth/wrong-password') {
           dispatch(showEmailSingIn());
           dispatch(setEmail(email));
+        } else if (e.code === 'auth/user-not-found') {
+          dispatch(showEmailSingUp())
+          dispatch(setEmail(email));
         } else if (e.code === 'auth/too-many-requests') {
           dispatch(setFailMessage(getErrorMessage(e)))
         } else {
@@ -46,16 +49,30 @@ export function signIn(password) {
         console.log(res);
         dispatch(removeLoader());
       }).catch(e => {
-        const message = e.code === 'auth/wrong-password'
-          ? 'Введён неверный пароль'
-          : e.code === 'auth/too-many-requests'
-          ? 'Слишком много неудачных попыток. Повторите позже'
-          : 'Произошла ошибка'
+        const message = getErrorMessage(e)
         dispatch(setFailMessage(message))
         dispatch(removeLoader());
         console.log(e);
       })
 
+  }
+}
+
+export function signUp(password) {
+  return async (dispatch, getState) => {
+    const { email } = getState().auth;
+    dispatch(addLoader());
+
+    firebase.auth.createUserWithEmailAndPassword(email, password)
+      .then(res => {
+        console.log(res);
+        dispatch(removeLoader());
+      }).catch(e => {
+        const message = getErrorMessage(e)
+        dispatch(setFailMessage(message))
+        dispatch(removeLoader());
+        console.log(e);
+      })
   }
 }
 
@@ -69,6 +86,12 @@ export function setFailMessage(message) {
 export function showEmailSingIn() {
   return {
     type: SHOW_EMAIL_SING_IN
+  }
+}
+
+export function showEmailSingUp() {
+  return {
+    type: SHOW_EMAIL_SING_UP
   }
 }
 
