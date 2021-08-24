@@ -26,7 +26,7 @@ function EntranceControl(props) {
     setValue(e.target.value);
     isFormDisabled && setFormDisable(false);
     !isInputValid && setInputValidity(true);
-    setFailMessage('');
+    props.errorMessage && props.setFailMessage('');
   }
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function EntranceControl(props) {
 
   useEffect(() => {
     return () => {
-      console.log('componentWillUnmount')
+      props.setFailMessage('')
     }
   }, [])
 

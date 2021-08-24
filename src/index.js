@@ -19,7 +19,7 @@ function loggerMiddleware(store) {
     return function(next) {
         return function(action) {
             const result = next(action)
-            console.log('Middleware', store.getState());
+            //console.log('Middleware', store.getState());
             return result
         }
     }

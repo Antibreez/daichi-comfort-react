@@ -40,12 +40,18 @@ function EmailSignupControl(props) {
     isFormDisabled && setFormDisable(false);
     !isFirstInputValid && setFirstInputValidity(true);
     !isSecondInputValid && setSecondInputValidity(true);
-    setFailMessage('');
+    props.errorMessage && props.setFailMessage('');
   }
 
   useEffect(() => {
     props.errorMessage.length > 0 ? setSecondInputValidity(false) : setSecondInputValidity(true)
   }, [props.errorMessage])
+
+  useEffect(() => {
+    return () => {
+      props.setFailMessage('')
+    }
+  }, [])
 
   return (
     <div>

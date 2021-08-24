@@ -1,4 +1,14 @@
-import { HAS_LOADING, NO_LOADING, SET_EMAIL, SET_FAIL_MESSAGE, SHOW_EMAIL_SING_IN, SHOW_EMAIL_SING_UP, SHOW_ENTRANCE } from "./actionTypes";
+import { 
+  HAS_LOADING, 
+  NO_LOADING, 
+  SET_EMAIL, 
+  SET_FAIL_MESSAGE, 
+  SHOW_EMAIL_SENT, 
+  SHOW_EMAIL_SING_IN, 
+  SHOW_EMAIL_SING_UP, 
+  SHOW_ENTRANCE 
+} from "./actionTypes";
+
 import Firebase from "../../services/firebase";
 
 const firebase = new Firebase();
@@ -46,7 +56,13 @@ export function signIn(password) {
 
     firebase.auth.signInWithEmailAndPassword(email, password)
       .then(res => {
-        console.log(res);
+        console.log(firebase.auth.currentUser.emailVerified);
+        if (firebase.auth.currentUser.emailVerified) {
+          // SUCCESS !!!!!!!!!!!!!!!!!
+        } else {
+          firebase.auth.signOut();
+          dispatch(setFailMessage('Подтвердите адрес электронной почты'))
+        }
         dispatch(removeLoader());
       }).catch(e => {
         const message = getErrorMessage(e)
@@ -66,7 +82,14 @@ export function signUp(password) {
     firebase.auth.createUserWithEmailAndPassword(email, password)
       .then(res => {
         console.log(res);
-        dispatch(removeLoader());
+
+        firebase.auth.currentUser.sendEmailVerification()
+          .then(() => {
+            firebase.auth.signOut();
+            dispatch(removeLoader());
+            dispatch(showEmailSent());
+          });
+
       }).catch(e => {
         const message = getErrorMessage(e)
         dispatch(setFailMessage(message))
@@ -80,6 +103,25 @@ export function setFailMessage(message) {
   return {
     type: SET_FAIL_MESSAGE,
     payload: message
+  }
+}
+
+export function setEmail(value) {
+  return {
+    type: SET_EMAIL,
+    payload: value
+  }
+}
+
+export function addLoader() {
+  return {
+    type: HAS_LOADING
+  }
+}
+
+export function removeLoader() {
+  return {
+    type: NO_LOADING
   }
 }
 
@@ -101,21 +143,8 @@ export function showEntrance() {
   }
 }
 
-export function setEmail(value) {
+export function showEmailSent() {
   return {
-    type: SET_EMAIL,
-    payload: value
-  }
-}
-
-export function addLoader() {
-  return {
-    type: HAS_LOADING
-  }
-}
-
-export function removeLoader() {
-  return {
-    type: NO_LOADING
+    type: SHOW_EMAIL_SENT
   }
 }

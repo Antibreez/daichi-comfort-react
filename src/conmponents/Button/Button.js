@@ -6,6 +6,7 @@ function Button(props) {
       className={s.Button}
       onClick={props.onClick}
       disabled={props.disabled}
+      type={props.type || 'button'}
     >
       { props.text }
     </button>

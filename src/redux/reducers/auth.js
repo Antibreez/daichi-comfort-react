@@ -1,4 +1,13 @@
-import { HAS_LOADING, NO_LOADING, SET_EMAIL, SET_FAIL_MESSAGE, SHOW_EMAIL_SING_IN, SHOW_EMAIL_SING_UP, SHOW_ENTRANCE } from "../actions/actionTypes";
+import { 
+  HAS_LOADING, 
+  NO_LOADING, 
+  SET_EMAIL, 
+  SET_FAIL_MESSAGE, 
+  SHOW_EMAIL_SENT, 
+  SHOW_EMAIL_SING_IN, 
+  SHOW_EMAIL_SING_UP, 
+  SHOW_ENTRANCE 
+} from "../actions/actionTypes";
 
 const initialSatate = {
   email: null,
@@ -8,6 +17,7 @@ const initialSatate = {
   isEntrance: true,
   isEmailSign: false,
   isSignup: false,
+  isEmailSent: false
 }
 
 export default function auth(state = initialSatate, action) {
@@ -18,6 +28,7 @@ export default function auth(state = initialSatate, action) {
         isEntrance: false,
         isEmailSign: true,
         isSignup: false,
+        isEmailSent: false
       }
     case SHOW_EMAIL_SING_UP:
       return {
@@ -25,6 +36,7 @@ export default function auth(state = initialSatate, action) {
         isEntrance: false,
         isEmailSign: false,
         isSignup: true,
+        isEmailSent: false
       }
     case SHOW_ENTRANCE:
       return {
@@ -32,6 +44,15 @@ export default function auth(state = initialSatate, action) {
         isEntrance: true,
         isEmailSign: false,
         isSignup: false,
+        isEmailSent: false
+      }
+    case SHOW_EMAIL_SENT:
+      return {
+        ...state,
+        isEntrance: false,
+        isEmailSign: false,
+        isSignup: false,
+        isEmailSent: true
       }
     case SET_EMAIL:
       return {
@@ -48,11 +69,11 @@ export default function auth(state = initialSatate, action) {
         ...state,
         isLoading: true
       }
-      case NO_LOADING:
-        return {
-          ...state,
-          isLoading: false
-        }
+    case NO_LOADING:
+      return {
+        ...state,
+        isLoading: false
+      }
     default:
       return state
   }

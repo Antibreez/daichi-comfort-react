@@ -9,6 +9,7 @@ import { showEmailSingIn, showEntrance } from '../../redux/actions/auth';
 import EmailSinginControl from '../../conmponents/controls/EmailSinginControl';
 import Loader from '../../conmponents/Loader/Loader';
 import EmailSingupControl from '../../conmponents/controls/EmailSingupControl';
+import Button from '../../conmponents/Button/Button';
 
 
 function Auth(props) {
@@ -22,13 +23,18 @@ function Auth(props) {
         <main className={s.Auth__main}>
           <div className={s.Auth__formBlockOuter}>
 
-            { false ? <button>go back</button> : null }
+            { props.isEmailSign || props.isSignUp 
+                ? <button 
+                    className={s.Auth__goBack} aria-label='Перейти назад'
+                    onClick={() => props.showEntrance()}
+                  >
+                  </button> 
+                : null 
+            }
 
             <div className={s.Auth__formBlockInner}>
               { props.isLoading ? <Loader/> : null }
 
-
-              {console.log(props)}
               {
                 props.isEntrance
                   ? <FormBlock
@@ -65,6 +71,18 @@ function Auth(props) {
                   : null
               }
 
+              {
+                props.isEmailSent
+                  ? <FormBlock
+                      title='На ваш Email отправлено письмо с подтверждением'
+                      desc='Следуйте инструкциям из письма, чтобы подтвердить адрес Email'
+                      hasLogo={false}
+                    >
+                      <Button text='Вернуться к авторизации' onClick={() => props.showEntrance()}/>
+                    </FormBlock>
+                  : null
+              }
+
             </div>
           </div>
         </main>
@@ -78,19 +96,20 @@ function Auth(props) {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     isEntrance: state.auth.isEntrance,
     isEmailSign: state.auth.isEmailSign,
     isSignUp: state.auth.isSignup,
     isLoading: state.auth.isLoading,
+    isEmailSent: state.auth.isEmailSent
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     showEntrance: () => dispatch(showEntrance()),
-    showEmailSingIn: () => dispatch(showEmailSingIn())
+    showEmailSingIn: () => dispatch(showEmailSingIn()),
+    showEntrance: () => dispatch(showEntrance())
   }
 }
 

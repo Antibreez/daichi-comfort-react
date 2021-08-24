@@ -46,13 +46,38 @@
 }
 
 .Auth__formBlockOuter {
+  position: relative;
   width: 410px;
 }
 
 .Auth__formBlockInner {
-  position: relative;
   width: 100%;
   background-color: #fff;
   border-radius: 15px;
   overflow: hidden;
+}
+
+.Auth__goBack {
+  position: absolute;
+  top: 0;
+  left: -64px;
+  width: 48px;
+  height: 48px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+  background-image: url("../../assets/images/small-arrow.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: transform 0.2s;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+  }
 }
