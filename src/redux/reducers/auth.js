@@ -1,8 +1,12 @@
 import { 
+  COUNTDOWN_TIMER,
   HAS_LOADING, 
   NO_LOADING, 
   SET_EMAIL, 
   SET_FAIL_MESSAGE, 
+  SET_PHONE, 
+  SET_TIMER, 
+  SET_USERUID, 
   SHOW_CODE_SENDING, 
   SHOW_EMAIL_SENT, 
   SHOW_EMAIL_SING_IN, 
@@ -11,15 +15,18 @@ import {
 } from "../actions/actionTypes";
 
 const initialSatate = {
+  userUid: null,
   email: null,
   password: null,
   errorMessage: '',
+  phone: null,
+  timer: null,
   isLoading: false,
   isEntrance: true,
   isEmailSign: false,
   isSignup: false,
   isEmailSent: false,
-  isCodeSending: false
+  isCodeSending: false,
 }
 
 export default function auth(state = initialSatate, action) {
@@ -79,6 +86,27 @@ export default function auth(state = initialSatate, action) {
         ...state,
         errorMessage: action.payload
       }
+    case SET_PHONE:
+      return {
+        ...state,
+        phone: action.payload
+      }
+    case SET_USERUID:
+      return {
+        ...state,
+        userUid: action.payload,
+        email: null,
+        password: null,
+        errorMessage: '',
+        phone: null,
+        timer: null,
+        isLoading: false,
+        isEntrance: true,
+        isEmailSign: false,
+        isSignup: false,
+        isEmailSent: false,
+        isCodeSending: false,
+      }
     case HAS_LOADING:
       return {
         ...state,
@@ -88,6 +116,16 @@ export default function auth(state = initialSatate, action) {
       return {
         ...state,
         isLoading: false
+      }
+    case COUNTDOWN_TIMER:
+      return {
+        ...state,
+        timer: state.timer--
+      }
+    case SET_TIMER:
+      return {
+        ...state,
+        timer: action.payload
       }
     default:
       return state

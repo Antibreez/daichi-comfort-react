@@ -1,10 +1,14 @@
 
 
 import { 
+  COUNTDOWN_TIMER,
   HAS_LOADING, 
   NO_LOADING, 
   SET_EMAIL, 
   SET_FAIL_MESSAGE, 
+  SET_PHONE, 
+  SET_TIMER, 
+  SET_USERUID, 
   SHOW_CODE_SENDING, 
   SHOW_EMAIL_SENT, 
   SHOW_EMAIL_SING_IN, 
@@ -12,16 +16,19 @@ import {
   SHOW_ENTRANCE 
 } from "./actionTypes";
 
-import Firebase from "../../services/firebase";
+import firebase from "../../services/firebase";
 
-const firebase = new Firebase();
+//const firebase = new Firebase();
 let confRes;
+let timer;
 
 function getErrorMessage(error) {
   return error.code === 'auth/wrong-password'
     ? 'Введён неверный пароль'
     : error.code === 'auth/too-many-requests'
     ? 'Слишком много неудачных попыток. Повторите позже'
+    : error.code === 'auth/invalid-verification-code'
+    ? 'Введён неверный код'
     : 'Произошла ошибка'
 }
 
@@ -63,6 +70,15 @@ export function signIn(password) {
         console.log(firebase.auth.currentUser.emailVerified);
         if (firebase.auth.currentUser.emailVerified) {
           // SUCCESS !!!!!!!!!!!!!!!!!
+      
+          removeTimer();
+          dispatch(setTimer(null));
+          localStorage.removeItem('codeTimer');
+
+          const uid = firebase.auth.currentUser.uid;
+
+          dispatch(setUserUid(uid));
+          localStorage.setItem('userUid', uid);
         } else {
           firebase.auth.signOut();
           dispatch(setFailMessage('Подтвердите адрес электронной почты'))
@@ -104,7 +120,8 @@ export function signUp(password) {
 }
 
 export function sendPhoneCode(phone) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+
     dispatch(addLoader());
     window.recaptchaVerifier = firebase.getRecaptcha();
 
@@ -114,10 +131,10 @@ export function sendPhoneCode(phone) {
           // SMS sent. Prompt user to type the code from the message, then sign the
           // user in with confirmationResult.confirm(code).
           confRes = confirmationResult;
-          console.log(confRes);
           dispatch(removeLoader());
           dispatch(showCodeSending());
-          // ...
+          dispatch(setPhone(phone));
+          localStorage.setItem('phone', phone);
         }).catch((error) => {
           // Error; SMS not sent
           // ...
@@ -130,16 +147,69 @@ export function sendPhoneCode(phone) {
 export function signWithPhone(code) {
   return async dispatch => {
     confRes.confirm(code).then((result) => {
-      // User signed in successfully.
-      console.log(result.user);
-      // ...
+      // SUCCESS
+      console.log(firebase.auth.currentUser);
+      
+      removeTimer();
+      dispatch(setTimer(null));
+      localStorage.removeItem('codeTimer');
+
+      const uid = firebase.auth.currentUser.uid;
+
+      dispatch(setUserUid(uid));
+      localStorage.setItem('userUid', uid);
+
     }).catch((error) => {
+      const message = getErrorMessage(error);
       // User couldn't sign in (bad verification code?)
       // ...
-      console.log(error);
+      dispatch(setFailMessage(message))
     });
   }
 
+}
+
+export function makeTimer() {
+  return async (dispatch, getState) => {
+    if (localStorage.getItem('codeTimer')) {
+      dispatch(setTimer(+localStorage.getItem('codeTimer')))
+      console.log(getState().auth.timer);
+  
+      timer = setInterval(() => {
+        let current = +localStorage.getItem('codeTimer');
+        current--;
+        localStorage.setItem('codeTimer', current);
+        console.log(current);
+  
+        if (current < 0) {
+          clearInterval(timer);
+          localStorage.removeItem('codeTimer');
+          dispatch(setTimer(null));
+        } else {
+          dispatch(setTimer(current))
+        }
+      }, 1000)
+    }
+  }
+}
+
+export function removeTimer() {
+  return () => {
+    clearInterval(timer);
+  }
+}
+
+export function countDownTimer() {
+  return {
+    type: COUNTDOWN_TIMER
+  }
+}
+
+export function setTimer(value) {
+  return {
+    type: SET_TIMER,
+    payload: value
+  }
 }
 
 export function setFailMessage(message) {
@@ -152,6 +222,20 @@ export function setFailMessage(message) {
 export function setEmail(value) {
   return {
     type: SET_EMAIL,
+    payload: value
+  }
+}
+
+export function setPhone(value) {
+  return {
+    type: SET_PHONE,
+    payload: value
+  }
+}
+
+export function setUserUid(value) {
+  return {
+    type: SET_USERUID,
     payload: value
   }
 }

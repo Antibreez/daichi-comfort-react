@@ -24,7 +24,7 @@ function Auth(props) {
         <main className={s.Auth__main}>
           <div className={s.Auth__formBlockOuter}>
 
-            { props.isEmailSign || props.isSignUp 
+            { props.isEmailSign || props.isSignUp || props.isCodeSending
                 ? <button 
                     className={s.Auth__goBack} aria-label='Перейти назад'
                     onClick={() => props.showEntrance()}

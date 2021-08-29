@@ -51,10 +51,11 @@ class Firebase {
   signOut = () => this.auth.signOut();
 
   getRecaptcha = () => {
+    console.log('recaptcha');
     return new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       'size': 'invisible',
     })
   }
 }
 
-export default Firebase;
+export default new Firebase();

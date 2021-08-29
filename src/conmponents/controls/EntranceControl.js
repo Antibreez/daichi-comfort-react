@@ -4,7 +4,7 @@ import s from './Controls.module.scss'
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { connect } from 'react-redux';
-import { entranceCheck, setEmail, setFailMessage, sendPhoneCode } from '../../redux/actions/auth';
+import { entranceCheck, setEmail, setFailMessage, sendPhoneCode, showCodeSending, makeTimer, removeTimer, setPhone } from '../../redux/actions/auth';
 import { isEmailValid, isPhoneValid, getProperPhone } from '../../services/validity';
 
 function EntranceControl(props) {
@@ -18,7 +18,25 @@ function EntranceControl(props) {
     if (isEmailValid(value)) {
       props.entranceCheck(value, '111')
     } else if (isPhoneValid(value)) {
-      props.sendPhoneCode(getProperPhone(value))
+      const phone = getProperPhone(value);
+
+      if (phone === props.phone && !props.timer) {
+        localStorage.setItem('codeTimer', 60);
+        props.makeTimer();
+        props.sendPhoneCode(phone);
+      }
+
+      if (phone === props.phone && props.timer) {
+        props.showCodeSending();
+      }
+
+      if (phone !== props.phone) {
+        props.removeTimer();
+        localStorage.setItem('codeTimer', 60);
+        props.makeTimer();
+        props.sendPhoneCode(phone);
+      }
+
     } else {
       setInputValidity(false)
     }
@@ -45,6 +63,10 @@ function EntranceControl(props) {
   }, [props.errorMessage])
 
   useEffect(() => {
+    props.removeTimer();
+    props.makeTimer();
+    props.setPhone(localStorage.getItem('phone'));
+
     return () => {
       props.setFailMessage('')
     }
@@ -79,6 +101,8 @@ function EntranceControl(props) {
 function mapStateToProps(state) {
   return {
     email: state.auth.email,
+    phone: state.auth.phone,
+    timer: state.auth.timer,
     errorMessage: state.auth.errorMessage
   }
 }
@@ -88,7 +112,11 @@ function mapDispatchToProps(dispatch) {
     entranceCheck: (value, password) => dispatch(entranceCheck(value, password)),
     setEmail: (value) => dispatch(setEmail(value)),
     setFailMessage: (message) => dispatch(setFailMessage(message)),
-    sendPhoneCode: (phone) => dispatch(sendPhoneCode(phone))
+    sendPhoneCode: (phone) => dispatch(sendPhoneCode(phone)),
+    setPhone: (phone) => dispatch(setPhone(phone)),
+    showCodeSending: () => dispatch(showCodeSending()),
+    makeTimer: () => dispatch(makeTimer()),
+    removeTimer: () => dispatch(removeTimer()),
   }
 }
 
