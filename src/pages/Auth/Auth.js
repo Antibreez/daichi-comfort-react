@@ -10,6 +10,7 @@ import EmailSinginControl from '../../conmponents/controls/EmailSinginControl';
 import Loader from '../../conmponents/Loader/Loader';
 import EmailSingupControl from '../../conmponents/controls/EmailSingupControl';
 import Button from '../../conmponents/Button/Button';
+import CodeControl from '../../conmponents/controls/CodeControl';
 
 
 function Auth(props) {
@@ -83,6 +84,19 @@ function Auth(props) {
                   : null
               }
 
+              {
+                props.isCodeSending
+                  ? <FormBlock
+                      title='Вход по номеру телефона'
+                      desc='Мы отправили код подтверждения на номер 
+                      +7 985 256-32-39'
+                      hasLogo={false}
+                    >
+                      <CodeControl />
+                    </FormBlock>
+                  : null
+              }
+
             </div>
           </div>
         </main>
@@ -101,7 +115,8 @@ function mapStateToProps(state) {
     isEmailSign: state.auth.isEmailSign,
     isSignUp: state.auth.isSignup,
     isLoading: state.auth.isLoading,
-    isEmailSent: state.auth.isEmailSent
+    isEmailSent: state.auth.isEmailSent,
+    isCodeSending: state.auth.isCodeSending,
   }
 }
 

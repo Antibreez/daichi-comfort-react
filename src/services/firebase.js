@@ -49,6 +49,12 @@ class Firebase {
   });
 
   signOut = () => this.auth.signOut();
+
+  getRecaptcha = () => {
+    return new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible',
+    })
+  }
 }
 
 export default Firebase;

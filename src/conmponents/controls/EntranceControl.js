@@ -4,7 +4,8 @@ import s from './Controls.module.scss'
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { connect } from 'react-redux';
-import { entranceCheck, setEmail, setFailMessage } from '../../redux/actions/auth';
+import { entranceCheck, setEmail, setFailMessage, sendPhoneCode } from '../../redux/actions/auth';
+import { isEmailValid, isPhoneValid, getProperPhone } from '../../services/validity';
 
 function EntranceControl(props) {
   const [value, setValue] = useState('')
@@ -13,13 +14,23 @@ function EntranceControl(props) {
 
   function entranceHandler(e) {
     e.preventDefault();
-    if (value.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/) === null) {
-      setInputValidity(false)
-    } else {
-      //props.showEmailSingIn();
+
+    if (isEmailValid(value)) {
       props.entranceCheck(value, '111')
-      //props.setEmail(value)
+    } else if (isPhoneValid(value)) {
+      props.sendPhoneCode(getProperPhone(value))
+    } else {
+      setInputValidity(false)
     }
+
+
+    // if (value.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/) === null) { 
+    //   setInputValidity(false)
+    // } else {
+    //   //props.showEmailSingIn();
+    //   props.entranceCheck(value, '111')
+    //   //props.setEmail(value)
+    // }
   }
 
   function changeHandle(e) {
@@ -37,7 +48,7 @@ function EntranceControl(props) {
     return () => {
       props.setFailMessage('')
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (
@@ -52,8 +63,10 @@ function EntranceControl(props) {
           message={props.errorMessage.length > 0 ? props.errorMessage : 'Некорректный формат адреса Email или номера телефона'}
         />
       </div>
+      <div id='recaptcha-container'></div>
       <div className={s.Controls__btn}>
         <Button
+          type='submit'
           text='Продолжить'
           disabled={isFormDisabled}
           onClick={entranceHandler}
@@ -74,7 +87,8 @@ function mapDispatchToProps(dispatch) {
   return {
     entranceCheck: (value, password) => dispatch(entranceCheck(value, password)),
     setEmail: (value) => dispatch(setEmail(value)),
-    setFailMessage: (message) => dispatch(setFailMessage(message))
+    setFailMessage: (message) => dispatch(setFailMessage(message)),
+    sendPhoneCode: (phone) => dispatch(sendPhoneCode(phone))
   }
 }
 

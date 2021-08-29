@@ -1,8 +1,11 @@
+
+
 import { 
   HAS_LOADING, 
   NO_LOADING, 
   SET_EMAIL, 
   SET_FAIL_MESSAGE, 
+  SHOW_CODE_SENDING, 
   SHOW_EMAIL_SENT, 
   SHOW_EMAIL_SING_IN, 
   SHOW_EMAIL_SING_UP, 
@@ -12,6 +15,7 @@ import {
 import Firebase from "../../services/firebase";
 
 const firebase = new Firebase();
+let confRes;
 
 function getErrorMessage(error) {
   return error.code === 'auth/wrong-password'
@@ -99,6 +103,45 @@ export function signUp(password) {
   }
 }
 
+export function sendPhoneCode(phone) {
+  return async dispatch => {
+    dispatch(addLoader());
+    window.recaptchaVerifier = firebase.getRecaptcha();
+
+    const appVerifier = window.recaptchaVerifier;
+    firebase.auth.signInWithPhoneNumber(phone, appVerifier)
+        .then((confirmationResult) => {
+          // SMS sent. Prompt user to type the code from the message, then sign the
+          // user in with confirmationResult.confirm(code).
+          confRes = confirmationResult;
+          console.log(confRes);
+          dispatch(removeLoader());
+          dispatch(showCodeSending());
+          // ...
+        }).catch((error) => {
+          // Error; SMS not sent
+          // ...
+          console.log(error);
+          dispatch(removeLoader());
+        });
+  }
+}
+
+export function signWithPhone(code) {
+  return async dispatch => {
+    confRes.confirm(code).then((result) => {
+      // User signed in successfully.
+      console.log(result.user);
+      // ...
+    }).catch((error) => {
+      // User couldn't sign in (bad verification code?)
+      // ...
+      console.log(error);
+    });
+  }
+
+}
+
 export function setFailMessage(message) {
   return {
     type: SET_FAIL_MESSAGE,
@@ -146,5 +189,11 @@ export function showEntrance() {
 export function showEmailSent() {
   return {
     type: SHOW_EMAIL_SENT
+  }
+}
+
+export function showCodeSending() {
+  return {
+    type: SHOW_CODE_SENDING
   }
 }

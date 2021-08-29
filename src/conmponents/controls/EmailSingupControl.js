@@ -51,7 +51,7 @@ function EmailSignupControl(props) {
     return () => {
       props.setFailMessage('')
     }
-  }, [])
+  }, [])// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -75,6 +75,7 @@ function EmailSignupControl(props) {
       </div>
       <div className={s.Controls__btn}>
         <Button
+          type='submit'
           text='Зарегистрироваться'
           disabled={isFormDisabled}
           onClick={singinHandler}
