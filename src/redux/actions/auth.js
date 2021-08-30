@@ -123,18 +123,19 @@ export function sendPhoneCode(phone) {
   return async (dispatch, getState) => {
 
     dispatch(addLoader());
-    window.recaptchaVerifier = firebase.getRecaptcha();
 
-    const appVerifier = window.recaptchaVerifier;
+    let appVerifier = firebase.getRecaptcha();
     firebase.auth.signInWithPhoneNumber(phone, appVerifier)
         .then((confirmationResult) => {
           // SMS sent. Prompt user to type the code from the message, then sign the
           // user in with confirmationResult.confirm(code).
           confRes = confirmationResult;
           dispatch(removeLoader());
-          dispatch(showCodeSending());
           dispatch(setPhone(phone));
           localStorage.setItem('phone', phone);
+
+          appVerifier.reset();
+          dispatch(showCodeSending());
         }).catch((error) => {
           // Error; SMS not sent
           // ...
@@ -158,6 +159,12 @@ export function signWithPhone(code) {
 
       dispatch(setUserUid(uid));
       localStorage.setItem('userUid', uid);
+      
+      localStorage.removeItem('phone');
+
+      confRes = null;
+
+
 
     }).catch((error) => {
       const message = getErrorMessage(error);

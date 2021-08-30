@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Auth from './pages/Auth/Auth';
 import { setUserUid } from './redux/actions/auth';
+import HomePage from './pages/HomePage/HomePage';
 
 function App(props) {
   useEffect(() => {
@@ -16,7 +17,7 @@ function App(props) {
     <>
       {
         props.userUid
-          ? null
+          ? <HomePage/>
           : <Auth/>
       }
     </>

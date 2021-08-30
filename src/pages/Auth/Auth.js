@@ -34,6 +34,7 @@ function Auth(props) {
             }
 
             <div className={s.Auth__formBlockInner}>
+              <div id="recaptcha-container"></div>
               { props.isLoading ? <Loader/> : null }
 
               {

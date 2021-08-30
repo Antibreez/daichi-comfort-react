@@ -85,7 +85,7 @@ function EntranceControl(props) {
           message={props.errorMessage.length > 0 ? props.errorMessage : 'Некорректный формат адреса Email или номера телефона'}
         />
       </div>
-      <div id='recaptcha-container'></div>
+      {/* <div id='recaptcha-container'></div> */}
       <div className={s.Controls__btn}>
         <Button
           type='submit'
