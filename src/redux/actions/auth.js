@@ -200,6 +200,23 @@ export function makeTimer() {
   }
 }
 
+export function sendPasswordReset() {
+  return (dispatch, getState) => {
+    const { email } = getState().auth;
+
+    firebase.auth.sendPasswordResetEmail(email)
+      .then(() => {
+        // Password reset email sent!
+        // ..
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ..
+      });
+  }
+}
+
 export function removeTimer() {
   return () => {
     clearInterval(timer);

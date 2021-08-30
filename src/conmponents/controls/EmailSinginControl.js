@@ -4,7 +4,7 @@ import s from './Controls.module.scss'
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { connect } from 'react-redux';
-import { signIn, setFailMessage } from '../../redux/actions/auth';
+import { signIn, setFailMessage, sendPasswordReset } from '../../redux/actions/auth';
 import { useEffect } from 'react';
 
 function EmailSigninControl(props) {
@@ -22,6 +22,10 @@ function EmailSigninControl(props) {
     isFormDisabled && setFormDisable(false);
     !isInputValid && setInputValidity(true);
     props.errorMessage && props.setFailMessage('');
+  }
+
+  function forgotPasswordHandle() {
+    props.sendPasswordReset();
   }
 
   useEffect(() => {
@@ -54,6 +58,7 @@ function EmailSigninControl(props) {
           onClick={singinHandler}
         />
       </div>
+      <button type='button' onClick={forgotPasswordHandle}>Забыли пароль?</button>
     </div>
   )
 }
@@ -67,7 +72,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     signIn: (password) => dispatch(signIn(password)),
-    setFailMessage: (message) => dispatch(setFailMessage(message))
+    setFailMessage: (message) => dispatch(setFailMessage(message)),
+    sendPasswordReset: () => dispatch(sendPasswordReset())
   }
 }
 
