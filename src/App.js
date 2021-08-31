@@ -3,18 +3,41 @@ import { connect } from 'react-redux';
 import Auth from './pages/Auth/Auth';
 import { setUserUid } from './redux/actions/auth';
 import HomePage from './pages/HomePage/HomePage';
+import { useState } from 'react';
 
 function App(props) {
+  const [isLoaded, setLoaded] = useState(false)
+
   useEffect(() => {
     const localUserUid = localStorage.getItem('userUid');
     const userUid = localUserUid ? localUserUid : null;
 
-    setUserUid(userUid);
+    props.setUserUid(userUid);
+    setLoaded(true);
   }, []);
 
 
   return (
     <>
+      { 
+        isLoaded 
+          ? null 
+          : <div class="preloader">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div> 
+      }
+
       {
         props.userUid
           ? <HomePage/>

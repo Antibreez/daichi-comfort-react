@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { connect } from "react-redux"
 import { setUserUid } from "../../redux/actions/auth";
 import firebase from '../../services/firebase';
@@ -11,6 +12,10 @@ function HomePage(props) {
         localStorage.removeItem('userUid');
         firebase.signOut();
     }
+
+    useEffect(() => {
+        console.log(firebase.auth);
+    })
 
     return (
         <>
