@@ -125,7 +125,6 @@ function mapDispatchToProps(dispatch) {
   return {
     showEntrance: () => dispatch(showEntrance()),
     showEmailSingIn: () => dispatch(showEmailSingIn()),
-    showEntrance: () => dispatch(showEntrance())
   }
 }
 

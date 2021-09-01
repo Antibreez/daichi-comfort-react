@@ -22,7 +22,7 @@ function App(props) {
       { 
         isLoaded 
           ? null 
-          : <div class="preloader">
+          : <div className="preloader">
               <div></div>
               <div></div>
               <div></div>
