@@ -8,6 +8,7 @@ import {
   SET_TIMER, 
   SET_USERUID, 
   SHOW_CODE_SENDING, 
+  SHOW_EMAIL_RESTORE_SENT, 
   SHOW_EMAIL_SENT, 
   SHOW_EMAIL_SING_IN, 
   SHOW_EMAIL_SING_UP, 
@@ -26,6 +27,7 @@ const initialSatate = {
   isEmailSign: false,
   isSignup: false,
   isEmailSent: false,
+  isEmailRestoreSent: false,
   isCodeSending: false,
 }
 
@@ -39,6 +41,7 @@ export default function auth(state = initialSatate, action) {
         isSignup: false,
         isEmailSent: false,
         isCodeSending: false,
+        isEmailRestoreSent: false
       }
     case SHOW_EMAIL_SING_UP:
       return {
@@ -48,6 +51,7 @@ export default function auth(state = initialSatate, action) {
         isSignup: true,
         isEmailSent: false,
         isCodeSending: false,
+        isEmailRestoreSent: false
       }
     case SHOW_ENTRANCE:
       return {
@@ -57,6 +61,7 @@ export default function auth(state = initialSatate, action) {
         isSignup: false,
         isEmailSent: false,
         isCodeSending: false,
+        isEmailRestoreSent: false
       }
     case SHOW_EMAIL_SENT:
       return {
@@ -66,6 +71,17 @@ export default function auth(state = initialSatate, action) {
         isSignup: false,
         isEmailSent: true,
         isCodeSending: false,
+        isEmailRestoreSent: false
+      }
+    case SHOW_EMAIL_RESTORE_SENT:
+      return {
+        ...state,
+        isEntrance: false,
+        isEmailSign: false,
+        isSignup: false,
+        isEmailSent: false,
+        isCodeSending: false,
+        isEmailRestoreSent: true
       }
     case SHOW_CODE_SENDING:
       return {

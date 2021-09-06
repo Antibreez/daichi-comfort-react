@@ -59,13 +59,20 @@ function CodeControl(props) {
               />
           </div>
           <button
+          className={ s.Controls__repeateBtn }
             onClick={ codeRepeatHandle }
             disabled={ props.timer ? true : false }
           >
             Получить код повторно
           </button>
 
-          { props.timer ? <span>{ props.timer }</span> : null }
+          { 
+            props.timer 
+              ? <span className={ s.Controls__repeateCodeValue }>
+                  (через { props.timer } сек.)
+                </span> 
+              : null 
+          }
         </div>
     )
 }

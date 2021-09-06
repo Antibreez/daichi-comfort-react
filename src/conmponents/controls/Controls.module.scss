@@ -1,3 +1,31 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+
 .Controls {
   margin-bottom: 36px;
+}
+
+.Controls__repeateBtn {
+  @include btn-reset;
+  @include h16;
+  margin-top: 24px;
+  color: $primary;
+  transition: color 0.3s;
+
+  &:not(:disabled):hover {
+    cursor: pointer;
+    color: $deep-blue;
+  }
+
+  &:disabled {
+    color: $grey300;
+  }
+}
+
+.Controls__repeateCodeValue {
+  display: block;
+  @include b16;
+  margin-top: 4px;
+  color: $grey400;
+  text-align: center;
 }

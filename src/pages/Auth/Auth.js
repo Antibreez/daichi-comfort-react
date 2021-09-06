@@ -34,7 +34,6 @@ function Auth(props) {
             }
 
             <div className={s.Auth__formBlockInner}>
-              <div id="recaptcha-container"></div>
               { props.isLoading ? <Loader/> : null }
 
               {
@@ -89,11 +88,22 @@ function Auth(props) {
                 props.isCodeSending
                   ? <FormBlock
                       title='Вход по номеру телефона'
-                      desc='Мы отправили код подтверждения на номер 
-                      +7 985 256-32-39'
+                      desc={`Мы отправили код подтверждения на номер ${props.phone}`}
                       hasLogo={false}
                     >
                       <CodeControl />
+                    </FormBlock>
+                  : null
+              }
+
+              {
+                props.isEmailRestoreSent
+                  ? <FormBlock
+                      title='На ваш Email отправлено письмо с инструкциями'
+                      desc='Следуйте инструкциям из письма, чтобы восстановить пароль, затем авторизуйтесь снова'
+                      hasLogo={false}
+                    >
+                      <Button text='Вернуться к авторизации' onClick={() => props.showEntrance()}/>
                     </FormBlock>
                   : null
               }
@@ -112,11 +122,13 @@ function Auth(props) {
 
 function mapStateToProps(state) {
   return {
+    phone: state.auth.phone,
     isEntrance: state.auth.isEntrance,
     isEmailSign: state.auth.isEmailSign,
     isSignUp: state.auth.isSignup,
     isLoading: state.auth.isLoading,
     isEmailSent: state.auth.isEmailSent,
+    isEmailRestoreSent: state.auth.isEmailRestoreSent,
     isCodeSending: state.auth.isCodeSending,
   }
 }

@@ -75,6 +75,8 @@ function EntranceControl(props) {
 
   return (
     <div>
+      <div id="recaptcha-container"></div>
+
       <div className={s.Controls}>
         <Input
           type='text'

@@ -10,6 +10,7 @@ import {
   SET_TIMER, 
   SET_USERUID, 
   SHOW_CODE_SENDING, 
+  SHOW_EMAIL_RESTORE_SENT, 
   SHOW_EMAIL_SENT, 
   SHOW_EMAIL_SING_IN, 
   SHOW_EMAIL_SING_UP, 
@@ -38,9 +39,9 @@ export function entranceCheck(email, password) {
 
     firebase.auth.signInWithEmailAndPassword(email, password)
       .then(res => {
-        console.log(res);
+        //console.log(res);
       }).catch(e => {
-        console.log(e);
+        //console.log(e);
         if (e.code === 'auth/wrong-password') {
           dispatch(showEmailSingIn());
           dispatch(setEmail(email));
@@ -53,8 +54,6 @@ export function entranceCheck(email, password) {
           dispatch(setFailMessage('Произошла ошибка'))
         }
 
-        // console.log('auth/user-not-found: ',e.code === 'auth/user-not-found');
-        // console.log('auth/wrong-password: ',e.code === 'auth/wrong-password');
         dispatch(removeLoader());
       })
   }
@@ -67,7 +66,6 @@ export function signIn(password) {
 
     firebase.auth.signInWithEmailAndPassword(email, password)
       .then(res => {
-        console.log(firebase.auth.currentUser.emailVerified);
         if (firebase.auth.currentUser.emailVerified) {
           // SUCCESS !!!!!!!!!!!!!!!!!
       
@@ -88,7 +86,7 @@ export function signIn(password) {
         const message = getErrorMessage(e)
         dispatch(setFailMessage(message))
         dispatch(removeLoader());
-        console.log(e);
+        //console.log(e);
       })
 
   }
@@ -101,7 +99,7 @@ export function signUp(password) {
 
     firebase.auth.createUserWithEmailAndPassword(email, password)
       .then(res => {
-        console.log(res);
+        //console.log(res);
 
         firebase.auth.currentUser.sendEmailVerification()
           .then(() => {
@@ -114,7 +112,7 @@ export function signUp(password) {
         const message = getErrorMessage(e)
         dispatch(setFailMessage(message))
         dispatch(removeLoader());
-        console.log(e);
+        //console.log(e);
       })
   }
 }
@@ -125,6 +123,7 @@ export function sendPhoneCode(phone) {
     dispatch(addLoader());
 
     let appVerifier = firebase.getRecaptcha();
+
     firebase.auth.signInWithPhoneNumber(phone, appVerifier)
         .then((confirmationResult) => {
           // SMS sent. Prompt user to type the code from the message, then sign the
@@ -139,7 +138,7 @@ export function sendPhoneCode(phone) {
         }).catch((error) => {
           // Error; SMS not sent
           // ...
-          console.log(error);
+          //console.log(error);
           dispatch(removeLoader());
         });
   }
@@ -147,9 +146,10 @@ export function sendPhoneCode(phone) {
 
 export function signWithPhone(code) {
   return async dispatch => {
+    dispatch(addLoader());
+
     confRes.confirm(code).then((result) => {
       // SUCCESS
-      console.log(firebase.auth.currentUser);
       
       removeTimer();
       dispatch(setTimer(null));
@@ -164,13 +164,14 @@ export function signWithPhone(code) {
 
       confRes = null;
 
-
+      dispatch(removeLoader());
 
     }).catch((error) => {
       const message = getErrorMessage(error);
       // User couldn't sign in (bad verification code?)
       // ...
       dispatch(setFailMessage(message))
+      dispatch(removeLoader());
     });
   }
 
@@ -180,13 +181,11 @@ export function makeTimer() {
   return async (dispatch, getState) => {
     if (localStorage.getItem('codeTimer')) {
       dispatch(setTimer(+localStorage.getItem('codeTimer')))
-      console.log(getState().auth.timer);
   
       timer = setInterval(() => {
         let current = +localStorage.getItem('codeTimer');
         current--;
         localStorage.setItem('codeTimer', current);
-        console.log(current);
   
         if (current < 0) {
           clearInterval(timer);
@@ -203,16 +202,17 @@ export function makeTimer() {
 export function sendPasswordReset() {
   return (dispatch, getState) => {
     const { email } = getState().auth;
+    dispatch(addLoader());
 
     firebase.auth.sendPasswordResetEmail(email)
       .then(() => {
         // Password reset email sent!
         // ..
+        dispatch(showEmailRestoreSent());
+        dispatch(removeLoader());
       })
       .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ..
+        dispatch(removeLoader());
       });
   }
 }
@@ -297,6 +297,12 @@ export function showEntrance() {
 export function showEmailSent() {
   return {
     type: SHOW_EMAIL_SENT
+  }
+}
+
+export function showEmailRestoreSent() {
+  return {
+    type: SHOW_EMAIL_RESTORE_SENT
   }
 }
 

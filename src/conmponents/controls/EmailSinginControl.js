@@ -58,7 +58,13 @@ function EmailSigninControl(props) {
           onClick={singinHandler}
         />
       </div>
-      <button type='button' onClick={forgotPasswordHandle}>Забыли пароль?</button>
+      <button
+        className={s.Controls__repeateBtn} 
+        type='button' 
+        onClick={forgotPasswordHandle}
+      >
+        Забыли пароль?
+      </button>
     </div>
   )
 }

@@ -17,6 +17,7 @@ const firebaseConfig = {
 class Firebase {
   constructor() {
     firebase.initializeApp(firebaseConfig);
+    firebase.auth().settings.appVerificationDisabledForTesting = true;
 
     this.auth = firebase.auth();
     this.database = firebase.database();
@@ -53,7 +54,9 @@ class Firebase {
   getRecaptcha = () => {
     return new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       'size': 'invisible',
-    
+      callback: response => {
+        console.log(response);
+      }
     })
   }
 }
